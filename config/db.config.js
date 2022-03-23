@@ -1,7 +1,7 @@
 module.exports = {
     HOST: "localhost",
     USER: "root",
-    PASSWORD: "infozium",
+    PASSWORD: "darshil",
     DATABASE: "api",
     PORT: 3306,
     dialect: "mysql",
