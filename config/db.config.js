@@ -1,7 +1,7 @@
 module.exports = {
     HOST: "127.0.0.1",
     USER: "root",
-    PASSWORD: "darshil",
+    PASSWORD: "darshil123",
     DATABASE: "api",
     PORT: 3306,
     dialect: "mysql",
