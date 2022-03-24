@@ -9,9 +9,11 @@ async function initialize() {
     // const connection = await mysql.createConnection({ HOST, PORT, USER, PASSWORD });
     // await connection.query(`CREATE DATABASE IF NOT EXISTS \`${DATABASE}}\`;`);
 
-    const sequelize = new Sequelize(DATABASE, USER, PASSWORD, { dialect: 'mysql' });
+    const sequelize = new Sequelize(DATABASE, USER, PASSWORD, { dialect: 'mysql' ,host: HOST,
+    port: PORT});
 
     db.User = require('../User/user.model')(sequelize);
-    await sequelize.sync();
+    db.UserDetails =require('../User_Details/userDetails.model')(sequelize);
+    await sequelize.sync({alter:true});
 }
 initialize();

@@ -11,6 +11,7 @@ app.use(cors());
 
 
 app.use(require('./User/user.controller'));
+app.use(require('./User_Details/userDetails.controller'));
 app.use(errorHandler);
 
 const port = process.env.NODE_ENV === 'production' ? (process.env.PORT || 80) : 4000;
