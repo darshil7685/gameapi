@@ -36,7 +36,7 @@ if (params.user_name) {
     const duplicateUserName=await db.UserDetails.findOne({ where: { user_name: params.user_name } })
     if(duplicateUserName)
    {
-    throw 'username " + params.user_name + " is already taken';
+    throw 'username ' + params.user_name + ' is already taken';
   }
 }
 
