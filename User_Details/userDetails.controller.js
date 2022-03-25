@@ -25,22 +25,29 @@ function registerSchema(req, res, next) {
 }
 
 async function create(params) {
+
 const duplicateUserId=await db.UserDetails.findOne({ where: {user_id: params.user_id } })
 if(duplicateUserId){
     throw 'Used Id '+params.user_id+' is already taken'
 }
+
+if (params.user_name) {
+  params.user_name = params.user_name.trim();
+    const duplicateUserName=await db.UserDetails.findOne({ where: { user_name: params.user_name } })
+    if(duplicateUserName)
+   {
+    throw 'username " + params.user_name + " is already taken';
+  }
+}
+
+if(params.user_mail){
 const duplicateMailId = await db.UserDetails.findOne({where:{user_mail:params.user_mail}})
 if(duplicateMailId){
   throw 'Mail Id '+params.user_mail+' is alreadytaken'
 }
-  if (params.user_name) {
-    params.user_name = params.user_name.trim();
-    if (
-      await db.UserDetails.findOne({ where: { user_name: params.user_name } })
-    ) {
-      throw 'username "' + params.user_name + '" is already taken';
-    }
-  }
+}
+
+ 
 
   if (params.user_password) {
     params.user_password = await bcrypt.hash(params.user_password, 10);
