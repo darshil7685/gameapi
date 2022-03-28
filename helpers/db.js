@@ -14,6 +14,6 @@ async function initialize() {
 
     db.User = require('../User/user.model')(sequelize);
     db.UserDetails =require('../User_Details/userDetails.model')(sequelize);
-    await sequelize.sync({alter:true});
+    await sequelize.sync();
 }
 initialize();
