@@ -4,7 +4,7 @@ module.exports = model;
 
 function model(sequelize) {
     const attributes = {
-        user_id: { type: DataTypes.BIGINT, allowNull: false ,primarykey:true,unique:true },
+        user_id: { type: DataTypes.BIGINT, allowNull: false ,primaryKey:true,unique:true },
         user_mail:{type:DataTypes.STRING,unique:true},
         user_name: { type: DataTypes.STRING},
         user_password: { type: DataTypes.STRING },
