@@ -23,6 +23,6 @@ async function initialize() {
     db.ChampionDetails.hasMany(db.bodyTypes,{foreignKey: 'champion_id',as:'bodytype'});
     //db.bodyTypes.belongsTo(db.ChampionDetails,{foreignKey: 'champion_id',as:'champion'});
 
-    await sequelize.sync();
+    await sequelize.sync({alter:true});
 }
 initialize();
