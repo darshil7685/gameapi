@@ -6,6 +6,7 @@ const bcrypt = require("bcryptjs");
 const validateRequest = require("../middleware/validate-request");
 
 router.post("/registerUserDetails", registerSchema, register);
+router.post('/updateUserDetails',updateSchema,update);
 router.get("/getAllUserDetails", getAllUserDetails);
 
 module.exports = router;
@@ -24,6 +25,19 @@ function registerSchema(req, res, next) {
 
   validateRequest(req, next, schema);
 }
+function updateSchema(req, res, next) {
+  const schema = Joi.object({
+    user_id: Joi.number().required(),
+    user_mail: Joi.string().empty(''),
+    user_name: Joi.string().trim().empty(''),
+    user_password: Joi.string().empty(''),
+    user_logintype: Joi.string().empty(''),
+    user_isActive: Joi.boolean().empty(''),
+    user_amount: Joi.number().empty(''),
+    user_debit_amount: Joi.number().empty('')
+  });
+  validateRequest(req, next, schema);
+}
 
 async function create(params) {
   const duplicateUserId = await db.UserDetails.findOne({
@@ -33,16 +47,16 @@ async function create(params) {
     throw "Used Id " + params.user_id + " is already taken";
   }
 
-  if (params.user_name) {
-    params.user_name = params.user_name.trim();
-    const duplicateUserName = await db.UserDetails.findOne({
-      where: { user_name: params.user_name },
-    });
-    if (duplicateUserName) {
-      throw "username " + params.user_name + " is already taken";
-    }
-  }
-
+  // if (params.user_name) {
+  //   params.user_name = params.user_name.trim();
+  //   const duplicateUserName = await db.UserDetails.findOne({
+  //     where: { user_name: params.user_name },
+  //   });
+  //   if (duplicateUserName) {
+  //     throw "username " + params.user_name + " is already taken";
+  //   }
+  // }
+if(!(params.user_logintype == "guestlogin")){
   if (params.user_mail) {
     const duplicateMailId = await db.UserDetails.findOne({
       where: { user_mail: params.user_mail },
@@ -51,6 +65,7 @@ async function create(params) {
       throw "Mail Id " + params.user_mail + " is alreadytaken";
     }
   }
+}
 
   if (params.user_password) {
     params.user_password = await bcrypt.hash(params.user_password, 10);
@@ -67,11 +82,40 @@ function register(req, res, next) {
     .catch(next);
 }
 
-async function getUser(id) {
-  const user = await db.User.findByPk(id);
-  if (!user) throw "User not found";
-  return user;
+
+async function updateUserDetails(params) {
+  const user = await db.UserDetails.findOne({
+    where: { user_id: params.user_id },
+  });
+  if (!user) {
+    throw "User Does not exist";
+  }
+
+  
+if(!(params.user_logintype == "guestlogin")){
+  if (params.user_mail) {
+    const emailChanged = params.user_mail && user.user_mail !== params.user_mail;
+    if (emailChanged && await db.UserDetails.findOne({ where: { user_mail: params.user_mail } })) {
+        throw 'email ' + params.user_mail + ' is already taken';
+    }
+  }
 }
+
+  if (params.user_password) {
+    params.user_password = await bcrypt.hash(params.user_password, 10);
+  }
+  Object.assign(user, params);
+    return await user.save();
+}
+
+function update(req, res, next) {
+  console.log("POST /updateUserDetails API call made ");
+  updateUserDetails(req.body)
+    .then((user) => res.json(user))
+    .catch(next);
+}
+
+
 
 async function getAllUserDetail() {
   const allUsers = await db.UserDetails.findAll({
@@ -85,4 +129,10 @@ function getAllUserDetails(req, res, next) {
     .then((users) => res.json(users))
     .catch(next);
 }
+
+// async function getUser(id) {
+//   const user = await db.User.findByPk(id);
+//   if (!user) throw "User not found";
+//   return user;
+// }
 

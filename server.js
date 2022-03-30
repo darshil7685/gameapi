@@ -12,6 +12,8 @@ app.use(cors());
 
 app.use(require('./User/user.controller'));
 app.use(require('./User_Details/userDetails.controller'));
+app.use(require('./Champion_Details/champion.controller'));
+
 app.all("*",(req,res,next)=>{
     throw "Requested Path not found";
 })

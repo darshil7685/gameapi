@@ -17,11 +17,11 @@ async function initialize() {
     db.ChampionDetails=require('../Champion_Details/championDetails.model')(sequelize);
     db.bodyTypes=require('../Champion_Details/bodytype.model')(sequelize);
 
-    db.UserDetails.hasMany(db.ChampionDetails);
-    db.ChampionDetails.belongsTo(db.UserDetails,{foreignKey:'user_id',as:'user'});
+    db.UserDetails.hasMany(db.ChampionDetails,{foreignKey: 'user_id',as:'champion'});
+    //db.ChampionDetails.belongsTo(db.UserDetails,{foreignKey: 'user_id',as:'user'});
 
-    db.ChampionDetails.hasMany(db.bodyTypes);
-    db.bodyTypes.belongsTo(db.ChampionDetails,{foreignKey:'champion_id',as:'champion'});
+    db.ChampionDetails.hasMany(db.bodyTypes,{foreignKey: 'champion_id',as:'bodytype'});
+    //db.bodyTypes.belongsTo(db.ChampionDetails,{foreignKey: 'champion_id',as:'champion'});
 
     await sequelize.sync();
 }
