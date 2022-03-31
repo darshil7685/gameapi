@@ -1,5 +1,5 @@
 const logger = require("../logger");
-const {} = require("../logger");
+
 
 function errorHandler(err, req, res, next) {
   switch (true) {
