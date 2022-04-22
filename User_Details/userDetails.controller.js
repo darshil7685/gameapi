@@ -11,7 +11,7 @@ const validateRequest = require("../middleware/validate-request");
 router.post("/registerUserDetails", registerSchema, register);
 router.post('/updateUserDetails',updateSchema,update);
 router.get("/getAllUserDetails", getAllUserDetails);
-router.get("/getUserDetails/:id",getUserDetails);
+router.get("/getUserDetail/:id",getUserDetails);
 
 module.exports = router;
 
