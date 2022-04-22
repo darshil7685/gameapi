@@ -3,18 +3,22 @@ const express = require("express");
 const router = express.Router();
 const Joi = require("joi");
 const bcrypt = require("bcryptjs");
+const jwt =require("jsonwebtoken");
 const validateRequest = require("../middleware/validate-request");
+//const {jwtSecret}=require("../config/jwt.config");
+//const {authorize}=require("../middleware/autorize");
 
 router.post("/registerUserDetails", registerSchema, register);
 router.post('/updateUserDetails',updateSchema,update);
 router.get("/getAllUserDetails", getAllUserDetails);
+router.get("/getUserDetails/:id",getUserDetails);
 
 module.exports = router;
 
 function registerSchema(req, res, next) {
   const schema = Joi.object({
     user_id: Joi.number().required(),
-    user_mail: Joi.string(),
+    user_mail: Joi.string().allow(null),
     user_name: Joi.string().trim(),
     user_password: Joi.string(),
     user_logintype: Joi.string().required(),
@@ -70,9 +74,14 @@ if(!(params.user_logintype == "guestlogin")){
   if (params.user_password) {
     params.user_password = await bcrypt.hash(params.user_password, 10);
   }
+  //const token = jwt.sign({ user_id:params.user_id }, jwtSecret, {});
+  //console.log("Token Generated "+token);
   const user = await db.UserDetails.create(params);
+
+  //user.token=token;
   // const { updatedAt, createdAt, ...newUser } = user;
   return user;
+  //return {...user.get(),token};
 }
 
 function register(req, res, next) {
@@ -128,6 +137,22 @@ function getAllUserDetails(req, res, next) {
   getAllUserDetail()
     .then((users) => res.json(users))
     .catch(next);
+}
+
+async function getUserDetail(params){
+  const userDetail = await db.UserDetails.findOne({
+    where: { user_id: params.id },
+  });
+  if(!userDetail){
+    throw "User Details not found";
+  }
+  return userDetail;
+}
+
+function getUserDetails(req,res,next){
+  console.log("GET /getUserDetails ApI call");
+  getUserDetail(req.params).then((users)=>res.json(users))
+  .catch(next);
 }
 
 // async function getUser(id) {
