@@ -9,7 +9,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
 
-
+app.get("/testing",(re,res)=>{
+    res.json("For testing");
+})
 app.use(require('./User/user.controller'));
 app.use(require('./User_Details/userDetails.controller'));
 app.use(require('./Champion_Details/champion.controller'));
