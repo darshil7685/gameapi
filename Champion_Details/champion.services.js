@@ -68,6 +68,7 @@ async function getChampionDetails(data) {
 
   const championData = await db.ChampionDetails.findAll({
     where: { user_id: data.user_id },
+    attributes: { exclude: [ "champion_id"] },
     include: {
       association: "bodytype",
       attributes: { exclude: ["id", "champion_id"] },
@@ -90,6 +91,7 @@ async function getChampionDetailsByChampion_index(data) {
       user_id: data.user_id,
       champion_index: data.champion_index,
     },
+    attributes: { exclude: [ "champion_id"] },
     include: {
       association: "bodytype",
       attributes: { exclude: ["id", "champion_id"] },
