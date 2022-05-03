@@ -24,7 +24,7 @@ const user=await db.ChampionDetails.findOne({where:{user_id:data.user_id,champio
       user.current_skintone = data.current_skintone;
       await user.save();
 
-    const bodytypes = data.bodytypelist;
+    const bodytypes = data.bodytype;
     bodytypes.forEach((element) => {
         element.champion_id = user.champion_id;
       });
@@ -47,7 +47,7 @@ const user=await db.ChampionDetails.findOne({where:{user_id:data.user_id,champio
   const champDetail = await champData.save();
   //return champDetail;
 
-  const bodytype = data.bodytypelist;
+  const bodytype = data.bodytype;
   bodytype.forEach((element) => {
     element.champion_id = champDetail.champion_id;
   });
